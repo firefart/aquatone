@@ -80,7 +80,6 @@ func RandomUserAgent() string {
 }
 
 func RandomIPv4Address() string {
-	rand.Seed(time.Now().UnixNano())
 	blocks := []string{}
 	for i := 0; i < 4; i++ {
 		number := rand.Intn(255)
