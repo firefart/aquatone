@@ -202,7 +202,7 @@ func (s *Session) initDirectories() {
 	for _, d := range []string{"headers", "html", "screenshots"} {
 		d = s.GetFilePath(d)
 		if _, err := os.Stat(d); os.IsNotExist(err) {
-			err = os.MkdirAll(d, 0755)
+			err = os.MkdirAll(d, 0o755)
 			if err != nil {
 				s.Out.Fatal("Failed to create required directory %s\n", d)
 				os.Exit(1)
@@ -246,7 +246,7 @@ func (s *Session) ToJSON() string {
 
 func (s *Session) SaveToFile(filename string) error {
 	path := s.GetFilePath(filename)
-	err := os.WriteFile(path, []byte(s.ToJSON()), 0644)
+	err := os.WriteFile(path, []byte(s.ToJSON()), 0o644)
 	if err != nil {
 		return err
 	}

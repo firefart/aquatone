@@ -95,7 +95,7 @@ func main() {
 		}
 
 		report := core.NewReport(&parsedSession, string(template))
-		f, err := os.OpenFile(sess.GetFilePath("aquatone_report.html"), os.O_RDWR|os.O_CREATE, 0644)
+		f, err := os.OpenFile(sess.GetFilePath("aquatone_report.html"), os.O_RDWR|os.O_CREATE, 0o644)
 		if err != nil {
 			sess.Out.Fatal("Error during report generation: %s\n", err)
 			os.Exit(1)
@@ -202,7 +202,7 @@ func main() {
 	sess.WaitGroup.Wait()
 
 	sess.Out.Important("Calculating page structures...")
-	f, _ := os.OpenFile(sess.GetFilePath("aquatone_urls.txt"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, _ := os.OpenFile(sess.GetFilePath("aquatone_urls.txt"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	for _, page := range sess.Pages {
 		filename := sess.GetFilePath(fmt.Sprintf("html/%s.html", page.BaseFilename()))
 		body, err := os.Open(filename)
@@ -258,7 +258,7 @@ func main() {
 		os.Exit(1)
 	}
 	report := core.NewReport(sess, string(template))
-	f, err = os.OpenFile(sess.GetFilePath("aquatone_report.html"), os.O_RDWR|os.O_CREATE, 0644)
+	f, err = os.OpenFile(sess.GetFilePath("aquatone_report.html"), os.O_RDWR|os.O_CREATE, 0o644)
 	if err != nil {
 		sess.Out.Fatal("Error during report generation: %s\n", err)
 		os.Exit(1)

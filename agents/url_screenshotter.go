@@ -129,7 +129,7 @@ func (a *URLScreenshotter) locateChrome() {
 func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	filePath := fmt.Sprintf("screenshots/%s.png", page.BaseFilename())
 	fullFilePath := a.session.GetFilePath(filePath)
-	var chromeArguments = []string{
+	chromeArguments := []string{
 		"--headless", "--disable-gpu", "--hide-scrollbars", "--mute-audio", "--disable-notifications",
 		"--no-first-run", "--disable-crash-reporter", "--ignore-certificate-errors", "--incognito",
 		"--disable-infobars", "--disable-sync", "--no-default-browser-check",
@@ -176,7 +176,7 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	}
 
 	// chrome saves all screenshots as 0600, be more permissive here
-	if err := os.Chmod(fullFilePath, 0644); err != nil {
+	if err := os.Chmod(fullFilePath, 0o644); err != nil {
 		a.session.Out.Error("%s: could not chmod screenshot: %v\n", page.URL, err)
 		return
 	}

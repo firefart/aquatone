@@ -108,7 +108,7 @@ func (a *URLRequester) writeHeaders(page *core.Page) {
 	for _, header := range page.Headers {
 		headers += fmt.Sprintf("%v: %v\n", header.Name, header.Value)
 	}
-	if err := os.WriteFile(a.session.GetFilePath(filepath), []byte(headers), 0644); err != nil {
+	if err := os.WriteFile(a.session.GetFilePath(filepath), []byte(headers), 0o644); err != nil {
 		a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 		a.session.Out.Error("Failed to write HTTP response headers for %s to %s\n", page.URL, a.session.GetFilePath(filepath))
 	}
@@ -124,7 +124,7 @@ func (a *URLRequester) writeBody(page *core.Page, resp gorequest.Response) {
 		return
 	}
 
-	if err := os.WriteFile(a.session.GetFilePath(filepath), body, 0644); err != nil {
+	if err := os.WriteFile(a.session.GetFilePath(filepath), body, 0o644); err != nil {
 		a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 		a.session.Out.Error("Failed to write HTTP response body for %s to %s\n", page.URL, a.session.GetFilePath(filepath))
 	}
