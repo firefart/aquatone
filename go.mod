@@ -1,6 +1,6 @@
 module github.com/firefart/aquatone
 
-go 1.23
+go 1.24
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.0
