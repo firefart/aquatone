@@ -177,7 +177,7 @@ func main() {
 
 	sess.Out.Important("Targets    : %d\n", len(targets))
 	sess.Out.Important("Threads    : %d\n", *sess.Options.Threads)
-	sess.Out.Important("Ports      : %s\n", strings.Trim(strings.Replace(fmt.Sprint(sess.Ports), " ", ", ", -1), "[]"))
+	sess.Out.Important("Ports      : %s\n", strings.Trim(strings.ReplaceAll(fmt.Sprint(sess.Ports), " ", ", "), "[]"))
 	sess.Out.Important("Output dir : %s\n\n", *sess.Options.OutDir)
 
 	sess.EventBus.Publish(core.SessionStart)

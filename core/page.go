@@ -83,7 +83,7 @@ type Tag struct {
 	Hash string `json:"hash"`
 }
 
-// nolint: gosimple
+// nolint: staticcheck
 func (t Tag) HasLink() bool {
 	if t.Link != "" {
 		return true
@@ -159,7 +159,7 @@ func (p *Page) BaseFilename() string {
 
 	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
 	host := strings.Replace(u.Host, ":", "__", 1)
-	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.Replace(host, ".", "_", -1), pathHash)
+	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.ReplaceAll(host, ".", "_"), pathHash)
 	return strings.ToLower(filename)
 }
 

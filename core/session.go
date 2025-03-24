@@ -223,7 +223,7 @@ func (s *Session) BaseFilenameFromURL(stru string) string {
 
 	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
 	host := strings.Replace(u.Host, ":", "__", 1)
-	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.Replace(host, ".", "_", -1), pathHash)
+	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.ReplaceAll(host, ".", "_"), pathHash)
 	return strings.ToLower(filename)
 }
 
@@ -270,19 +270,19 @@ func NewSession() (*Session, error) {
 
 	if *session.Options.ChromePath != "" {
 		if _, err := os.Stat(*session.Options.ChromePath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Chrome path %s does not exist", *session.Options.ChromePath)
+			return nil, fmt.Errorf("chrome path %s does not exist", *session.Options.ChromePath)
 		}
 	}
 
 	if *session.Options.SessionPath != "" {
 		if _, err := os.Stat(*session.Options.SessionPath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Session path %s does not exist", *session.Options.SessionPath)
+			return nil, fmt.Errorf("session path %s does not exist", *session.Options.SessionPath)
 		}
 	}
 
 	if *session.Options.TemplatePath != "" {
 		if _, err := os.Stat(*session.Options.TemplatePath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("Template path %s does not exist", *session.Options.TemplatePath)
+			return nil, fmt.Errorf("template path %s does not exist", *session.Options.TemplatePath)
 		}
 	}
 
