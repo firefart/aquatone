@@ -17,7 +17,7 @@ require (
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
-	github.com/elazarl/goproxy v0.0.0-20210110162100-a92cc753f88e // indirect
+	github.com/elazarl/goproxy v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
