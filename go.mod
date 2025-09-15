@@ -11,7 +11,7 @@ require (
 	github.com/parnurzeal/gorequest v0.3.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/remeh/sizedwaitgroup v1.0.0
-	golang.org/x/net v0.43.0
+	golang.org/x/net v0.44.0
 	mvdan.cc/xurls/v2 v2.6.0
 )
 
@@ -23,5 +23,5 @@ require (
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 )
