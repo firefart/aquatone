@@ -1,10 +1,21 @@
 name: golangci-lint
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - "**.go"
+      - "go.mod"
+      - "go.sum"
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+  pull-requests: read
+  checks: write
+
 jobs:
   golangci:
     name: lint
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
