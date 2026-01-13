@@ -13,7 +13,7 @@ type Report struct {
 func (r *Report) Render(dest io.Writer) error {
 	funcMap := template.FuncMap{
 		"json": func(json string) template.JS {
-			return template.JS(json)
+			return template.JS(json) // nolint: gosec
 		},
 	}
 

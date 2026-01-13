@@ -3,6 +3,7 @@ package agents
 import (
 	"fmt"
 	"net"
+	"strconv"
 	"time"
 
 	"github.com/firefart/aquatone/core"
@@ -36,7 +37,7 @@ func (a *TCPPortScanner) OnHost(host string) {
 			defer a.session.WaitGroup.Done()
 			if a.scanPort(port, host) {
 				a.session.Stats.IncrementPortOpen()
-				a.session.Out.Info("%s: port %s %s\n", host, Green(fmt.Sprintf("%d", port)), Green("open"))
+				a.session.Out.Info("%s: port %s %s\n", host, Green(strconv.Itoa(port)), Green("open"))
 				a.session.EventBus.Publish(core.TCPPort, port, host)
 			} else {
 				a.session.Stats.IncrementPortClosed()
@@ -47,7 +48,7 @@ func (a *TCPPortScanner) OnHost(host string) {
 }
 
 func (a *TCPPortScanner) scanPort(port int, host string) bool {
-	conn, _ := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", host, port), time.Duration(*a.session.Options.ScanTimeout)*time.Millisecond)
+	conn, _ := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", host, port), time.Duration(*a.session.Options.ScanTimeout)*time.Millisecond) // nolint: noctx
 	if conn != nil {
 		conn.Close()
 		return true

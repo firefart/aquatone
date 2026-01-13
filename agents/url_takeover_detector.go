@@ -22,7 +22,7 @@ func (d *URLTakeoverDetector) ID() string {
 
 func (a *URLTakeoverDetector) Register(s *core.Session) error {
 	if err := s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false); err != nil {
-		return nil
+		return err
 	}
 	a.session = s
 	return nil
@@ -50,12 +50,12 @@ func (a *URLTakeoverDetector) OnURLResponsive(u string) {
 
 func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	hostname := page.ParsedURL().Hostname()
-	addrs, err := net.LookupHost(fmt.Sprintf("%s.", hostname))
+	addrs, err := net.LookupHost(fmt.Sprintf("%s.", hostname)) // nolint: noctx
 	if err != nil {
 		a.session.Out.Error("Unable to resolve %s to IP addresses: %s\n", hostname, err)
 		return
 	}
-	cname, err := net.LookupCNAME(fmt.Sprintf("%s.", hostname))
+	cname, err := net.LookupCNAME(fmt.Sprintf("%s.", hostname)) // nolint: noctx
 	if err != nil {
 		a.session.Out.Error("Unable to resolve %s to CNAME: %s\n", hostname, err)
 		return
@@ -151,7 +151,7 @@ func (a *URLTakeoverDetector) runDetectorFunctions(page *core.Page) {
 	}
 }
 
-func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, _ string, body string) bool {
 	githubAddrs := [...]string{"185.199.108.153", "185.199.109.153", "185.199.110.153", "185.199.111.153"}
 	fingerprints := [...]string{"There isn't a GitHub Pages site here.", "For root URLs (like http://example.com/) you must provide an index.html file"}
 	for _, githubAddr := range githubAddrs {
@@ -171,7 +171,7 @@ func (a *URLTakeoverDetector) detectGithubPages(p *core.Page, addrs []string, cn
 	return false
 }
 
-func (a *URLTakeoverDetector) detectAmazonS3(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectAmazonS3(p *core.Page, _ []string, cname string, body string) bool {
 	fingerprints := [...]string{"NoSuchBucket", "The specified bucket does not exist"}
 	if !strings.HasSuffix(cname, ".amazonaws.com.") {
 		return false
@@ -186,7 +186,7 @@ func (a *URLTakeoverDetector) detectAmazonS3(p *core.Page, addrs []string, cname
 	return true
 }
 
-func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, _ []string, cname string, body string) bool {
 	if cname != "cname.createsend.com." {
 		return false
 	}
@@ -199,7 +199,7 @@ func (a *URLTakeoverDetector) detectCampaignMonitor(p *core.Page, addrs []string
 	return true
 }
 
-func (a *URLTakeoverDetector) detectCargoCollective(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectCargoCollective(p *core.Page, _ []string, cname string, body string) bool {
 	if cname != "subdomain.cargocollective.com." {
 		return false
 	}
@@ -212,7 +212,7 @@ func (a *URLTakeoverDetector) detectCargoCollective(p *core.Page, addrs []string
 	return true
 }
 
-func (a *URLTakeoverDetector) detectFeedPress(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectFeedPress(p *core.Page, _ []string, cname string, body string) bool {
 	if cname != "redirect.feedpress.me." {
 		return false
 	}
@@ -225,7 +225,7 @@ func (a *URLTakeoverDetector) detectFeedPress(p *core.Page, addrs []string, cnam
 	return true
 }
 
-func (a *URLTakeoverDetector) detectGhost(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectGhost(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".ghost.io.") {
 		return false
 	}
@@ -237,7 +237,7 @@ func (a *URLTakeoverDetector) detectGhost(p *core.Page, addrs []string, cname st
 	return true
 }
 
-func (a *URLTakeoverDetector) detectHelpjuice(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectHelpjuice(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".helpjuice.com.") {
 		return false
 	}
@@ -250,7 +250,7 @@ func (a *URLTakeoverDetector) detectHelpjuice(p *core.Page, addrs []string, cnam
 	return false
 }
 
-func (a *URLTakeoverDetector) detectHelpScout(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectHelpScout(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".helpscoutdocs.com.") {
 		return false
 	}
@@ -263,7 +263,7 @@ func (a *URLTakeoverDetector) detectHelpScout(p *core.Page, addrs []string, cnam
 	return true
 }
 
-func (a *URLTakeoverDetector) detectHeroku(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectHeroku(p *core.Page, _ []string, cname string, body string) bool {
 	herokuCnames := [...]string{".herokudns.com.", ".herokuapp.com.", ".herokussl.com."}
 	for _, herokuCname := range herokuCnames {
 		if strings.HasSuffix(cname, herokuCname) {
@@ -279,7 +279,7 @@ func (a *URLTakeoverDetector) detectHeroku(p *core.Page, addrs []string, cname s
 	return false
 }
 
-func (a *URLTakeoverDetector) detectJetBrains(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectJetBrains(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".myjetbrains.com.") {
 		return false
 	}
@@ -292,7 +292,7 @@ func (a *URLTakeoverDetector) detectJetBrains(p *core.Page, addrs []string, cnam
 	return true
 }
 
-func (a *URLTakeoverDetector) detectMicrosoftAzure(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectMicrosoftAzure(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".azurewebsites.net.") {
 		return false
 	}
@@ -305,7 +305,7 @@ func (a *URLTakeoverDetector) detectMicrosoftAzure(p *core.Page, addrs []string,
 	return true
 }
 
-func (a *URLTakeoverDetector) detectReadme(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectReadme(p *core.Page, _ []string, cname string, body string) bool {
 	readmeCnames := [...]string{".readme.io.", ".readmessl.com."}
 	for _, readmeCname := range readmeCnames {
 		if strings.HasSuffix(cname, readmeCname) {
@@ -364,7 +364,7 @@ func (a *URLTakeoverDetector) detectTumblr(p *core.Page, addrs []string, cname s
 	return false
 }
 
-func (a *URLTakeoverDetector) detectUserVoice(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectUserVoice(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".uservoice.com.") {
 		return false
 	}
@@ -376,7 +376,7 @@ func (a *URLTakeoverDetector) detectUserVoice(p *core.Page, addrs []string, cnam
 	return true
 }
 
-func (a *URLTakeoverDetector) detectWordpress(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectWordpress(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".wordpress.com.") {
 		return false
 	}
@@ -387,7 +387,7 @@ func (a *URLTakeoverDetector) detectWordpress(p *core.Page, addrs []string, cnam
 	return true
 }
 
-func (a *URLTakeoverDetector) detectSmugMug(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectSmugMug(p *core.Page, _ []string, cname string, body string) bool {
 	if cname != "domains.smugmug.com." {
 		return false
 	}
@@ -421,7 +421,7 @@ func (a *URLTakeoverDetector) detectStrikingly(p *core.Page, addrs []string, cna
 	return false
 }
 
-func (a *URLTakeoverDetector) detectUptimeRobot(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectUptimeRobot(p *core.Page, _ []string, cname string, body string) bool {
 	if cname != "stats.uptimerobot.com." {
 		return false
 	}
@@ -433,7 +433,7 @@ func (a *URLTakeoverDetector) detectUptimeRobot(p *core.Page, addrs []string, cn
 	return true
 }
 
-func (a *URLTakeoverDetector) detectPantheon(p *core.Page, addrs []string, cname string, body string) bool {
+func (a *URLTakeoverDetector) detectPantheon(p *core.Page, _ []string, cname string, body string) bool {
 	if !strings.HasSuffix(cname, ".pantheonsite.io.") {
 		return false
 	}

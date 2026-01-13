@@ -106,7 +106,7 @@ func (a *URLTechnologyFingerprinter) loadFingerprints() {
 		a.session.Out.Fatal("Can't read technology fingerprints file: %v\n", err)
 		os.Exit(1)
 	}
-	if err := json.Unmarshal(fingerprints, &a.fingerprints); err != nil {
+	if err := json.Unmarshal(fingerprints, &a.fingerprints); err != nil { // nolint: musttag
 		a.session.Out.Fatal("Can't unmarshal technology fingerprints file: %v\n", err)
 		os.Exit(1)
 	}

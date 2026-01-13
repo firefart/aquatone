@@ -45,7 +45,7 @@ func (a *URLHostnameResolver) OnURLResponsive(url string) {
 	a.session.WaitGroup.Add()
 	go func(page *core.Page) {
 		defer a.session.WaitGroup.Done()
-		addrs, err := net.LookupHost(fmt.Sprintf("%s.", page.ParsedURL().Hostname()))
+		addrs, err := net.LookupHost(fmt.Sprintf("%s.", page.ParsedURL().Hostname())) // nolint: noctx
 		if err != nil {
 			a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 			a.session.Out.Error("Failed to resolve hostname for %s\n", page.URL)

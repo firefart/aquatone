@@ -44,7 +44,7 @@ func hasSupportedScheme(s string) bool {
 
 func main() {
 	if sess, err = core.NewSession(); err != nil {
-		fmt.Println(err)
+		fmt.Println(err) // nolint: forbidigo
 		os.Exit(1)
 	}
 
@@ -147,21 +147,22 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	var targets []string
 
-	if *sess.Options.Nmap {
+	switch {
+	case *sess.Options.Nmap:
 		parser := parsers.NewNmapParser()
 		targets, err = parser.Parse(reader)
 		if err != nil {
 			sess.Out.Fatal("Unable to parse input as Nmap/Masscan XML: %v\n", err)
 			os.Exit(1)
 		}
-	} else if *sess.Options.HostPort {
+	case *sess.Options.HostPort:
 		parser := parsers.NewHostPortParser()
 		targets, err = parser.Parse(reader)
 		if err != nil {
 			sess.Out.Fatal("Unable to parse input as Host/Port: %v\n", err)
 			os.Exit(1)
 		}
-	} else {
+	default:
 		parser := parsers.NewRegexParser()
 		targets, err = parser.Parse(reader)
 		if err != nil {

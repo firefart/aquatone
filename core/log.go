@@ -40,7 +40,7 @@ func (l *Logger) SetDebug(d bool) {
 	l.debug = d
 }
 
-func (l *Logger) Log(level int, format string, args ...interface{}) {
+func (l *Logger) Log(level int, format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Lock()
 	defer l.Unlock()
 	if level == DEBUG && !l.debug {
@@ -52,34 +52,34 @@ func (l *Logger) Log(level int, format string, args ...interface{}) {
 	if c, ok := LogColors[level]; ok {
 		c.Printf(format, args...)
 	} else {
-		fmt.Printf(format, args...)
+		fmt.Printf(format, args...) // nolint: forbidigo
 	}
 
 	if level == FATAL {
-		os.Exit(1)
+		os.Exit(1) // nolint: gocritic
 	}
 }
 
-func (l *Logger) Fatal(format string, args ...interface{}) {
+func (l *Logger) Fatal(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(FATAL, format, args...)
 }
 
-func (l *Logger) Error(format string, args ...interface{}) {
+func (l *Logger) Error(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(ERROR, format, args...)
 }
 
-func (l *Logger) Warn(format string, args ...interface{}) {
+func (l *Logger) Warn(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(WARN, format, args...)
 }
 
-func (l *Logger) Important(format string, args ...interface{}) {
+func (l *Logger) Important(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(IMPORTANT, format, args...)
 }
 
-func (l *Logger) Info(format string, args ...interface{}) {
+func (l *Logger) Info(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(INFO, format, args...)
 }
 
-func (l *Logger) Debug(format string, args ...interface{}) {
+func (l *Logger) Debug(format string, args ...interface{}) { // nolint: goprintffuncname
 	l.Log(DEBUG, format, args...)
 }

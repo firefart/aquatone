@@ -1,7 +1,7 @@
 package core
 
 import (
-	"crypto/sha1"
+	"crypto/sha1" // nolint: gosec
 	"encoding/json"
 	"fmt"
 	"io"
@@ -217,11 +217,11 @@ func (s *Session) BaseFilenameFromURL(stru string) string {
 		return ""
 	}
 
-	h := sha1.New()
+	h := sha1.New()               // nolint: gosec
 	io.WriteString(h, u.Path)     // nolint: errcheck
 	io.WriteString(h, u.Fragment) // nolint: errcheck
 
-	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
+	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16] // nolint: perfsprint
 	host := strings.Replace(u.Host, ":", "__", 1)
 	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.ReplaceAll(host, ".", "_"), pathHash)
 	return strings.ToLower(filename)
@@ -246,7 +246,7 @@ func (s *Session) ToJSON() string {
 
 func (s *Session) SaveToFile(filename string) error {
 	path := s.GetFilePath(filename)
-	err := os.WriteFile(path, []byte(s.ToJSON()), 0o644)
+	err := os.WriteFile(path, []byte(s.ToJSON()), 0o600)
 	if err != nil {
 		return err
 	}

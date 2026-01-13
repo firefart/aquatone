@@ -1,11 +1,11 @@
 package agents
 
 import (
-	"crypto/sha1"
+	"crypto/sha1" // nolint: gosec
 	"crypto/tls"
 	"fmt"
 	"io"
-	"math/rand"
+	"math/rand" // nolint: depguard
 	"net/url"
 	"strconv"
 	"strings"
@@ -76,13 +76,13 @@ var (
 )
 
 func RandomUserAgent() string {
-	return UserAgents[rand.Intn(len(UserAgents))]
+	return UserAgents[rand.Intn(len(UserAgents))] // nolint: gosec
 }
 
 func RandomIPv4Address() string {
 	blocks := []string{}
-	for i := 0; i < 4; i++ {
-		number := rand.Intn(255)
+	for range 4 {
+		number := rand.Intn(255) // nolint: gosec
 		blocks = append(blocks, strconv.Itoa(number))
 	}
 
@@ -98,7 +98,7 @@ func Gorequest(o core.Options) *gorequest.SuperAgent {
 		Proxy(*o.Proxy).
 		Timeout(time.Duration(*o.HTTPTimeout) * time.Millisecond).
 		SetDebug(*o.Debug).
-		TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		TLSClientConfig(&tls.Config{InsecureSkipVerify: true}) // nolint: gosec
 }
 
 func BaseFilenameFromURL(s string) string {
@@ -107,11 +107,11 @@ func BaseFilenameFromURL(s string) string {
 		return ""
 	}
 
-	h := sha1.New()
+	h := sha1.New()               // nolint: gosec
 	io.WriteString(h, u.Path)     // nolint: errcheck
 	io.WriteString(h, u.Fragment) // nolint: errcheck
 
-	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
+	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16] // nolint: perfsprint
 	host := strings.Replace(u.Host, ":", "__", 1)
 	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.ReplaceAll(host, ".", "_"), pathHash)
 	return strings.ToLower(filename)

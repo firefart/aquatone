@@ -1,7 +1,7 @@
 package core
 
 import (
-	"crypto/sha1"
+	"crypto/sha1" // nolint: gosec
 	"fmt"
 	"io"
 	"net"
@@ -19,14 +19,15 @@ type Header struct {
 	IncreasesSecurity bool   `json:"increasesSecurity"`
 }
 
-func (h *Header) SetSecurityFlags() {
-	if h.decreasesSecurity() {
+func (h Header) SetSecurityFlags() {
+	switch {
+	case h.decreasesSecurity():
 		h.DecreasesSecurity = true
 		h.IncreasesSecurity = false
-	} else if h.increasesSecurity() {
+	case h.increasesSecurity():
 		h.DecreasesSecurity = false
 		h.IncreasesSecurity = true
-	} else {
+	default:
 		h.DecreasesSecurity = false
 		h.IncreasesSecurity = false
 	}
@@ -129,7 +130,7 @@ func (p *Page) AddTag(text string, tagType string, link string) {
 	p.Lock()
 	defer p.Unlock()
 
-	h := sha1.New()
+	h := sha1.New()            // nolint: gosec
 	io.WriteString(h, text)    // nolint: errcheck
 	io.WriteString(h, tagType) // nolint: errcheck
 	io.WriteString(h, link)    // nolint: errcheck
@@ -138,7 +139,7 @@ func (p *Page) AddTag(text string, tagType string, link string) {
 		Text: text,
 		Type: tagType,
 		Link: link,
-		Hash: fmt.Sprintf("%x", h.Sum(nil)),
+		Hash: fmt.Sprintf("%x", h.Sum(nil)), // nolint: perfsprint
 	})
 }
 
@@ -153,11 +154,11 @@ func (p *Page) AddNote(text string, noteType string) {
 
 func (p *Page) BaseFilename() string {
 	u := p.ParsedURL()
-	h := sha1.New()
+	h := sha1.New()               // nolint: gosec
 	io.WriteString(h, u.Path)     // nolint: errcheck
 	io.WriteString(h, u.Fragment) // nolint: errcheck
 
-	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
+	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16] // nolint: perfsprint
 	host := strings.Replace(u.Host, ":", "__", 1)
 	filename := fmt.Sprintf("%s__%s__%s", u.Scheme, strings.ReplaceAll(host, ".", "_"), pathHash)
 	return strings.ToLower(filename)

@@ -26,6 +26,8 @@ func GetPageStructure(body io.Reader) ([]string, error) {
 				structure = append(structure, fmt.Sprintf("#%s", attr.Val))
 				break
 			}
+		case html.TextToken, html.EndTagToken, html.SelfClosingTagToken, html.CommentToken, html.DoctypeToken:
+			// Ignore these tokens
 		}
 	}
 }

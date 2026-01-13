@@ -11,11 +11,12 @@ var securePorts = []int{
 
 func HostAndPortToURL(host string, port int, protocol string) string {
 	var url string
-	if protocol != "" {
+	switch {
+	case protocol != "":
 		url = fmt.Sprintf("%s://%s", protocol, host)
-	} else if isSecurePort(port) {
+	case isSecurePort(port):
 		url = fmt.Sprintf("https://%s", host)
-	} else {
+	default:
 		url = fmt.Sprintf("http://%s", host)
 	}
 	if isStandardPort(port) {

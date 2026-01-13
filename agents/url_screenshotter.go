@@ -105,7 +105,7 @@ func (a *URLScreenshotter) locateChrome() {
 	if strings.Contains(strings.ToLower(a.chromePath), "chrome") {
 		a.session.Out.Warn("Using unreliable Google Chrome for screenshots. Install Chromium for better results.\n\n")
 	} else {
-		out, err := exec.Command(a.chromePath, "--version").Output()
+		out, err := exec.Command(a.chromePath, "--version").Output() // nolint: gosec, noctx
 		if err != nil {
 			a.session.Out.Warn("An error occurred while trying to determine version of Chromium.\n\n")
 			return
@@ -113,7 +113,7 @@ func (a *URLScreenshotter) locateChrome() {
 		version := string(out)
 		re := regexp.MustCompile(`(\d+)\.`)
 		match := re.FindStringSubmatch(version)
-		if len(match) <= 0 {
+		if len(match) == 0 {
 			a.session.Out.Warn("Unable to determine version of Chromium. Screenshotting might be unreliable.\n\n")
 			return
 		}
@@ -152,7 +152,7 @@ func (a *URLScreenshotter) screenshotPage(page *core.Page) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*a.session.Options.ScreenshotTimeout)*time.Millisecond)
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, a.chromePath, chromeArguments...)
+	cmd := exec.CommandContext(ctx, a.chromePath, chromeArguments...) // nolint: gosec
 	if err := cmd.Start(); err != nil {
 		a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 		a.session.Stats.IncrementScreenshotFailed()

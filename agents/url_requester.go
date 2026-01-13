@@ -57,16 +57,17 @@ func (a *URLRequester) OnURL(url string) {
 		defer resp.Body.Close()
 
 		a.session.Stats.IncrementRequestSuccessful()
-		if resp.StatusCode >= 500 {
+		switch {
+		case resp.StatusCode >= 500:
 			a.session.Stats.IncrementResponseCode5xx()
 			status = Red(resp.Status)
-		} else if resp.StatusCode >= 400 {
+		case resp.StatusCode >= 400:
 			a.session.Stats.IncrementResponseCode4xx()
 			status = Yellow(resp.Status)
-		} else if resp.StatusCode >= 300 {
+		case resp.StatusCode >= 300:
 			a.session.Stats.IncrementResponseCode3xx()
 			status = Green(resp.Status)
-		} else {
+		default:
 			a.session.Stats.IncrementResponseCode2xx()
 			status = Green(resp.Status)
 		}
@@ -106,9 +107,9 @@ func (a *URLRequester) writeHeaders(page *core.Page) {
 	filepath := fmt.Sprintf("headers/%s.txt", page.BaseFilename())
 	headers := fmt.Sprintf("%s\n", page.Status)
 	for _, header := range page.Headers {
-		headers += fmt.Sprintf("%v: %v\n", header.Name, header.Value)
+		headers += fmt.Sprintf("%v: %v\n", header.Name, header.Value) // nolint: perfsprint
 	}
-	if err := os.WriteFile(a.session.GetFilePath(filepath), []byte(headers), 0o644); err != nil {
+	if err := os.WriteFile(a.session.GetFilePath(filepath), []byte(headers), 0o600); err != nil {
 		a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 		a.session.Out.Error("Failed to write HTTP response headers for %s to %s\n", page.URL, a.session.GetFilePath(filepath))
 	}
@@ -124,7 +125,7 @@ func (a *URLRequester) writeBody(page *core.Page, resp gorequest.Response) {
 		return
 	}
 
-	if err := os.WriteFile(a.session.GetFilePath(filepath), body, 0o644); err != nil {
+	if err := os.WriteFile(a.session.GetFilePath(filepath), body, 0o600); err != nil {
 		a.session.Out.Debug("[%s] Error: %v\n", a.ID(), err)
 		a.session.Out.Error("Failed to write HTTP response body for %s to %s\n", page.URL, a.session.GetFilePath(filepath))
 	}

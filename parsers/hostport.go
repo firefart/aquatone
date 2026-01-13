@@ -57,7 +57,7 @@ func parseLine(line string) ([]string, error) {
 	for _, p := range ports {
 		portInt, err := strconv.Atoi(p)
 		if err != nil {
-			return nil, fmt.Errorf("invlalid format for %q: %v", p, err)
+			return nil, fmt.Errorf("invlalid format for %q: %w", p, err)
 		}
 
 		urls = append(urls, core.HostAndPortToURL(host, portInt, ""))
