@@ -47,5 +47,5 @@ jobs:
           else
             git add .
             git commit -m "auto update from github actions"
-            git push origin main
+            git push origin master
           fi
