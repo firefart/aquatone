@@ -1,6 +1,6 @@
 module github.com/firefart/aquatone
 
-go 1.25
+go 1.25.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.11.0
@@ -11,7 +11,7 @@ require (
 	github.com/parnurzeal/gorequest v0.3.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/remeh/sizedwaitgroup v1.0.0
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 	mvdan.cc/xurls/v2 v2.6.0
 )
 
