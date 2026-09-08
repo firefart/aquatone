@@ -1,6 +1,6 @@
 module github.com/firefart/aquatone
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.13.0
@@ -23,11 +23,11 @@ require (
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
-	golang.org/x/mod v0.40.0 // indirect
-	golang.org/x/sync v0.22.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/mod v0.41.0 // indirect
+	golang.org/x/sync v0.23.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/tools v0.49.0 // indirect
-	mvdan.cc/gofumpt v0.11.0 // indirect
+	mvdan.cc/gofumpt v0.12.0 // indirect
 )
 
 tool mvdan.cc/gofumpt
