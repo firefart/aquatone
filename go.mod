@@ -11,7 +11,7 @@ require (
 	github.com/parnurzeal/gorequest v0.3.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/remeh/sizedwaitgroup v1.0.0
-	golang.org/x/net v0.61.0
+	golang.org/x/net v0.62.0
 	mvdan.cc/xurls/v2 v2.6.0
 )
 
